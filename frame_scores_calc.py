@@ -1,12 +1,17 @@
+# Constants
+MAX_FRAMES = 10
+PINS_PER_FRAME = 10
+
+
 def _roll_value(roll, previous_roll=None):
     """
     Convert roll symbols to pin counts.
     previous_roll is needed to compute spare values.
     """
     if roll == "X":
-        return 10
+        return PINS_PER_FRAME
     if roll == "/":
-        return 10 - previous_roll
+        return PINS_PER_FRAME - previous_roll
     return int(roll)
 
 
@@ -32,7 +37,7 @@ def calculate_frame_scores(rolls):
     i = 0  # index into rolls
     frame = 1
 
-    while frame <= 10 and i < len(rolls):
+    while frame <= MAX_FRAMES and i < len(rolls):
         roll1 = rolls[i]
 
         # STRIKE
@@ -44,7 +49,7 @@ def calculate_frame_scores(rolls):
                 next1 = _roll_value(rolls[i+1])
                 # spare can't appear right after a strike, so safe
                 next2 = _roll_value(rolls[i+2], next1)
-                frame_scores.append(10 + next1 + next2)
+                frame_scores.append(PINS_PER_FRAME + next1 + next2)
             i += 1
             frame += 1
             continue
@@ -62,7 +67,7 @@ def calculate_frame_scores(rolls):
                 frame_scores.append(None)
             else:
                 next1 = _roll_value(rolls[i+2])
-                frame_scores.append(10 + next1)
+                frame_scores.append(PINS_PER_FRAME + next1)
             i += 2
             frame += 1
             continue
